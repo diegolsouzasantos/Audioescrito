@@ -1,0 +1,15 @@
+CREATE TABLE 'users' (
+    'id' INT(8) NOT NULL AUTO_INCREMENT,
+    'username' VARCHAR(64) NOT NULL,
+    'password' VARCHAR(64) NOT NULL,
+    PRIMARY KEY(id)
+)
+
+CREATE TAbLE 'files' (
+    'file_id' INT(8) NOT NULL,
+    'file_name' VARCHAR(64) NOT NULL,
+    'file_path' VARCHAR(128) NOT NULL,
+    'file_photo_path' VARCHAR(128) NOT NULL,
+    PRIMARY KEY(file_id)
+    CONSTRAINT PRIMARY KEY (file_id) REFERENCES 'id'
+)
