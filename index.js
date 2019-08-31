@@ -12,17 +12,6 @@ const routes = require('./routes/router');
 
 app.use('/', routes);
 
-app.use(function (req, res, next) {
-	let err = new Error('File Not Found');
-	err.status = 404;
-	next(err);
-});
-  
-app.use(function (err, req, res, next) {
-	res.status(err.status || 500);
-	res.send(err.message);
-});
-
-app.listen(1000, function () {
-	console.log('Application running on port 10000');
+app.listen(3400, function () {
+	console.log('Application running on port 3400');
 });
