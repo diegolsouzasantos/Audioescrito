@@ -20,4 +20,5 @@ const Text = ({
 	}
 });
 
+
 module.exports = Text;
