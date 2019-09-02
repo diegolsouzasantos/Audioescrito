@@ -8,7 +8,7 @@ app.use(express.static(__dirname + '/views'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const routes = require('./routes/user');
+const routes = require('./routes/routes');
 
 app.use('/', routes);
 
