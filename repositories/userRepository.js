@@ -1,71 +1,57 @@
-const mongo = require('mongodb').MongoClient;
-const url = 'mongodb+srv://audioescritomaster:yFNuM1JL8oSOI09F@hpc-x-nwjtd.mongodb.net/test?retryWrites=true&w=majority';
+const user = require('../models/user');
 
-const getUser = function (currentEmail, currentPassword, callback) {
-	try {
-		mongo.connect(url, (err, client) => {
-			if (err) {
-				console.log(err);
-			} else {
-				const db = client.db('Audioescrito');
-				const collection = db.collection('users');
-				let currentUser = {
-					email: currentEmail,
-					password: currentPassword,
-				}
-				collection.find({ email: currentUser.email }, result => {
-					if (err) {
-						return callback(err)
-					} else if (typeof result == 'undefined') {
-						console.log('Não existe uma conta com este email!');
-						return callback(err);
-					}
-					currentUser.encryptPassword();
-					if (currentUser.validatePassword(result.password)) {
-						return callback(null, user);
-					} else {
-						return callback();
-					}
-				});
-			}
-			client.close();
-		});
-	} catch (err) {
-		throw err;
-	}
-};
+const database = require('../lib/database/index');
 
-const createUser = function (newUser, callback) {
-	try {
-		mongo.connect(url, (err, client) => {
-			if (err) {
-				console.log(err);
-			} else {
-				const db = client.db('Audioescrito');
-				const collection = db.collection('users');
-				collection.find({ email: newUser.email }, result => {
-					if (err) {
-						return callback(err);
-					} else if (typeof result != 'undefined') {
-						console.log('Já existe uma conta de usuário com este email.');
-						return callback(err);
-					} else {
-						newUser.encryptPassword();
-						collection.insertOne({ email: newUser.email, password: newUser.password }, result => {
-							if (err) {
-								callback(err);
-							} else {
-								return callback(null, result);
-							}
-						});
-					}
-				});
-				client.close();
-			}
+module.exports = {
+
+	// resolver
+	getUserBy: async (args) => {
+		try {
+			database.connect();
+			const requestUser = await user.findOne(args);
+
+           	// resolver 
+			database.disconnect();
+			return requestUser;
+		} catch (error) {
+			throw error;
+		}
+	},
+
+	createUser: async (args) => {
+		try {
+			database.connect();
+			const requestUser = await user.create(args);
 			
-		});
-		
-	} catch (err) {
-		throw err;
-	}
-}
+			// resolver
+			console.log(requestUser);
+			database.disconnect();
+
+			return requestUser;
+		} catch (error) {
+			throw error;
+		}
+	},
+
+	updateUser: (id, args) => {
+		try {
+			database.connect();
+			const requestUser = user.findByIdAndUpdate(id, { $set: args }, { new: true });
+			//database.connection.close();
+			return requestUser;
+		} catch (error) {
+			throw error;
+		}
+	},
+
+	deleteUser: (id) => {
+		try {
+			database.connect();
+			const requestUser = user.findByIdAndDelete(id);
+			//database.connection.close();
+			return requestUser;
+		} catch (error) {
+			throw error;
+		}
+	},
+};

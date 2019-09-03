@@ -1,18 +1,17 @@
+var mongoose = require('mongoose');
 const User = require('../models/user');
 
-const Text = ({
+const Text = new mongoose.Schema({
 	author: {
 		type: User.email,
 		required: true,
 	},
 	fileName: {
 		type: String,
-		unique: true,
 		required: true,
 	},
 	filePhotoPath: {
 		type: String,
-		required: true,
 	},
 	filePath: {
 		type: String,
@@ -20,5 +19,5 @@ const Text = ({
 	}
 });
 
-
+var Text = mongoose.model('Text', Text);
 module.exports = Text;
