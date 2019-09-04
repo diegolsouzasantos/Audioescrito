@@ -4,6 +4,7 @@
   "description": "test app for Audioescrito",
   "main": "index.js",
   "scripts": {
+    "start": "node server.js",
     "test": "testapp"
   },
   "author": "Diego Santos",

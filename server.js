@@ -1,17 +1,7 @@
-const express = require('express');
-const bodyParser = require('body-parser');
+const app = require('./src/config/express');
 
-const app = express();
+const port = app.get('port');
 
-app.use(express.static(__dirname + '/views'));
-
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
-const routes = require('./routes/routes');
-
-app.use('/', routes);
-
-app.listen(3400, function () {
-	console.log('Application running on port 3400');
-});
+app.listen(port, function() { 
+	console.log('Application running on port:' + port) 
+}); 
