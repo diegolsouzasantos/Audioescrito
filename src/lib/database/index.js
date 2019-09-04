@@ -8,7 +8,9 @@ module.exports = {
 
             mongoose.connect(('mongodb+srv://' + url), {
                 useNewUrlParser: true,
-                useUnifiedTopology: true
+                useUnifiedTopology: true,
+                useFindAndModify: false,
+                useCreateIndex: true
             });
 
         } catch (error) {

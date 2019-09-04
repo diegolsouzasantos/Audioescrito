@@ -1,12 +1,16 @@
 const textServices = require('../services/textServices');
 module.exports = {
-    create: async (req, res) => {
-        const args = req.query;
+    add: async (req, res) => {
+        const args = {
+            author: req.params.email,
+            fileName: req.body.fileName,
+            content: req.body.content,   
+        }
         try {
             const text = await textServices.create(args);
             return res.status(200).json(text);
         } catch (error) {
-            res.status(error.status).json({
+            res.status(500).json({
                 name: error.name,
                 message: error.message,
             });
@@ -14,25 +18,28 @@ module.exports = {
     },
 
     list: async (req, res) => {
-        const author = req.query;
+        const args = req.params.email;
         try {
-            const texts = await textServices.list(author);
-            return res.send(texts);
+            const texts = await textServices.list(args);
+            return res.status(200).json(texts);
         } catch (error) {
-            res.status(error.status).json({
+            res.status(500).json({
                 name: error.name,
                 message: error.message,
             });
         }
     },
 
-    get: async (req, res) => {
-        const { author, fileName } = req.query;
+    getOne: async (req, res) => {
+        const args = {
+            author: req.params.email,
+            fileName: req.params.fileName,
+        }
         try {
-            const text = await textServices.get(author, fileName);
-            return res.send(text);
+            const text = await textServices.getText(args);
+            return res.status(200).json(text);
         } catch (error) {
-            res.status(error.status).json({
+            res.status(500).json({
                 name: error.name,
                 message: error.message,
             });
@@ -40,12 +47,15 @@ module.exports = {
     },
 
     erase: async (req, res) => {
-        const { author, fileName } = req.query;
+        const args = {
+            author: req.params.email,
+            fileName: req.params.fileName,
+        }
         try {
-            await textServices.erase(author, fileName);
+            await textServices.erase(args);
             return res.send('Text deleted!');
         } catch (error) {
-            res.status(error.status).json({
+            res.status(500).json({
                 name: error.name,
                 message: error.message,
             });
@@ -53,7 +63,11 @@ module.exports = {
     },
 
     update: async (req, res) => {
-        const args = req.query;
+        const args = {
+            author: req.params.email,
+            fileName: req.query.fileName,
+            content: req.query.content
+        }
         try {
             const text = textServices.update(args);
             return res.status(200).json(text);
@@ -65,11 +79,12 @@ module.exports = {
         }
     },
 
+    // not implemented
     share: async (req, res) => {
-        const { author, fileName, userList } = req.query;
+        const args = req.query;
         try {
             const text = textServices.share(author, fileName, userList);
-            return res.send(text);
+            return res.status(200).json(text);
         } catch (error) {
             res.status(error.status).json({
                 name: error.name,

@@ -3,9 +3,9 @@ const textSchema = require('../models/text');
 const model = mongoose.model('Text', textSchema);
 
 module.exports = {
-	getTextBy: (args) => {
+	createText: (args) => {
 		try {
-			return model.findOne(args);
+			return model.create(args);
 		} catch (error) {
 			throw error;
 		}
@@ -19,9 +19,9 @@ module.exports = {
 		}
 	},
 
-	createText: (args) => {
+	getTextBy: (args) => {
 		try {
-			return model.create(args);
+			return model.findOne(args);
 		} catch (error) {
 			throw error;
 		}

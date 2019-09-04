@@ -5,19 +5,31 @@ module.exports = {
         try {
             const text = await textRep.getTextBy({ author: args.author, fileName: args.fileName });
             if (text) {
-                throw new Error('You already have a text file with that name!', 409);
+                throw new Error('You already have a text file with that name!');
             }
-            return createText(args);
+            return textRep.createText(args);
         } catch (error) {
             throw error;
         }
     },
 
-    get: async (author, fileName) => {
+    list: async (args) => {
         try {
-            const text = await textRep.getTextBy({ author: author, fileName: fileName });
+            const texts = await textRep.getTextsBy({ author: args.author });
+            if (!texts) {
+                throw new Error('Text not found');
+            }
+            return texts;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    getText: async (args) => {
+        try {
+            const text = await textRep.getTextBy({ author: args.author, fileName: args.fileName });
             if (!text) {
-                throw new Error('Text not found', 401);
+                throw new Error('Text not found');
             }
             return text;
         } catch (error) {
@@ -25,11 +37,11 @@ module.exports = {
         }
     },
 
-    erase: async (author, fileName) => {
+    erase: async (args) => {
         try {
-            const text = await textRep.findOneAndRemove({ author: author, fileName: fileName });
+            const text = await textRep.deleteText({ author: args.author, fileName: args.fileName });
             if (!text) {
-                throw new Error('Text not found', 401);
+                throw new Error('Text not found');
             }
             return text;
         } catch (error) {

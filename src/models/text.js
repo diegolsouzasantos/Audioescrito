@@ -2,11 +2,12 @@ const mongoose = require('mongoose');
 
 const Text = new mongoose.Schema({
 	author: { 
-			type: mongoose.Schema.Types.ObjectId, 
-			ref: 'User',
+			type: String, 
+			ref: 'User.email',
 	},
 	fileName: {
 		type: String,
+		index: true,
 		required: true,
 	},
 	content: {
